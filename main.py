@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 import pandas as pd
-#import psutil
 
 # Instanciamos un objeto de la clase fastapi para construir la aplicación
 app = FastAPI(title='STEAM Games: Consultas', description='Esta aplicación permite realizar consultas sobre videojuegos, reseñas de usuarios, recomendaciones y más')
@@ -112,6 +111,3 @@ def sentiment_analysis(anio: int):
         negativos = df_anio[df_anio['sentiment_analysis']==0].shape[0] # número de filas de sentimientos negativos(0)
 
         return {'Negative': negativos, 'Neutral': neutros, 'Positive': positivos}
-
-
-#print(psutil.Process().memory_info().rss)
