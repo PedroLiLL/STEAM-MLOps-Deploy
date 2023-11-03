@@ -14,6 +14,93 @@ reviews_games = pd.read_parquet('reviews_games.parquet')
 steam_games = pd.read_parquet('steam_games_ml.parquet')
 
 # ruta inicial
+@app.get("/")
+async def index():
+    mensaje = 'Bienvenid@ a mi API para consultas sobre videojuegos, reseñas de usuarios y recomendaciones de la plataforma STEAM'
+    return {'Mensaje': mensaje}
+
+
+@app.get("/Play-Time-Genre/{genero}", name="Tiempo de juego por género")
+def PlayTimeGenre(genero: str):
+    '''
+    devuelve el año con mas horas jugadas para dicho género
+
+    Args: 
+        genero (str): género del juego
+
+    return:
+        dict: diccionario con el género X y el año de lanzamiento con más horas jugadas
+    
+    '''
+    diccionario = {'Action': 2012,
+                   'RPG': 2011,
+                   'Strategy': 2015,
+                   'Casual': 2017,
+                   'Simulation': 2006,
+                   'Indie': 2013,
+                   'Racing': 2016,
+                   'Sports': 2013,
+                   'Adventure': 2011,
+                   'Early Access': 2013,
+                   'Free to Play': 2017,
+                   'Massively Multiplayer': 2013,
+                   'Utilities': 2014,
+                   'Animation &amp; Modeling': 2015,
+                   'Video Production': 2015,
+                   'Design &amp; Illustration': 2012,
+                   'Web Publishing': 2012,
+                   'Education': 2015,
+                   'Software Training': 2015,
+                   'Photo Editing': 2015,
+                   'Audio Production': 2014}
+    
+    if genero in diccionario:
+        return {f'Año de lanzamiento con más horas jugadas para el género {genero}' : diccionario[genero]}
+    else:
+        return "No se encontró un género similar al ingresado, ingrese otro tipo de género"
+
+
+@app.get("/User-For-Genre/{genero}", name="Usuario con mas minutos jugados para un género")
+def UserForGenre(genero: str):
+    '''
+    devuelve el usuario con mas minutos jugados para dicho género
+
+    Args: 
+        genero (str): género del juego
+
+    return:
+        dict: diccionario con el género X y el usuario con más horas jugadas
+    
+    '''
+
+    diccionario = {'Action': {'Usuario con más minutos jugados para género Action': 'REBAS_AS_F-T', 'Minutos jugados': [{'Año': 1996, 'Minutos': 0}, {'Año': 1998, 'Minutos': 2}, {'Año': 1999, 'Minutos': 225}, {'Año': 2000, 'Minutos': 0}, {'Año': 2001, 'Minutos': 11}, {'Año': 2002, 'Minutos': 1}, {'Año': 2003, 'Minutos': 1863}, {'Año': 2004, 'Minutos': 2115}, {'Año': 2005, 'Minutos': 3293}, {'Año': 2006, 'Minutos': 138}, {'Año': 2007, 'Minutos': 375}, {'Año': 2008, 'Minutos': 2573}, {'Año': 2009, 'Minutos': 7926}, {'Año': 2010, 'Minutos': 4460}, {'Año': 2011, 'Minutos': 37705}, {'Año': 2012, 'Minutos': 50635}, {'Año': 2013, 'Minutos': 97566}, {'Año': 2014, 'Minutos': 158114}, {'Año': 2015, 'Minutos': 162452}, {'Año': 2016, 'Minutos': 138572}, {'Año': 2017, 'Minutos': 1990}]},
+                   'RPG': {'Usuario con más minutos jugados para género RPG': 'REBAS_AS_F-T', 'Minutos jugados': [{'Año': 1999, 'Minutos': 1}, {'Año': 2002, 'Minutos': 0}, {'Año': 2003, 'Minutos': 0}, {'Año': 2005, 'Minutos': 1113}, {'Año': 2007, 'Minutos': 426}, {'Año': 2008, 'Minutos': 30}, {'Año': 2009, 'Minutos': 943}, {'Año': 2010, 'Minutos': 36}, {'Año': 2011, 'Minutos': 19772}, {'Año': 2012, 'Minutos': 14631}, {'Año': 2013, 'Minutos': 31896}, {'Año': 2014, 'Minutos': 81069}, {'Año': 2015, 'Minutos': 94105}, {'Año': 2016, 'Minutos': 91414}, {'Año': 2017, 'Minutos': 55}]},
+                   'Strategy': {'Usuario con más minutos jugados para género Strategy': 'Steamified', 'Minutos jugados': [{'Año': 1988, 'Minutos': 0}, {'Año': 1990, 'Minutos': 0}, {'Año': 1993, 'Minutos': 0}, {'Año': 1995, 'Minutos': 2}, {'Año': 1997, 'Minutos': 0}, {'Año': 1998, 'Minutos': 0}, {'Año': 1999, 'Minutos': 0}, {'Año': 2000, 'Minutos': 0}, {'Año': 2001, 'Minutos': 309}, {'Año': 2002, 'Minutos': 75}, {'Año': 2003, 'Minutos': 327}, {'Año': 2004, 'Minutos': 85}, {'Año': 2005, 'Minutos': 502}, {'Año': 2006, 'Minutos': 359}, {'Año': 2007, 'Minutos': 149}, {'Año': 2008, 'Minutos': 1192}, {'Año': 2009, 'Minutos': 2432}, {'Año': 2010, 'Minutos': 1278}, {'Año': 2011, 'Minutos': 5613}, {'Año': 2012, 'Minutos': 4873}, {'Año': 2013, 'Minutos': 10106}, {'Año': 2014, 'Minutos': 36087}, {'Año': 2015, 'Minutos': 67815}, {'Año': 2016, 'Minutos': 59267}, {'Año': 2017, 'Minutos': 1500}]},
+                   'Casual': {'Usuario con más minutos jugados para género Casual': 'REBAS_AS_F-T', 'Minutos jugados': [{'Año': 1999, 'Minutos': 0}, {'Año': 2002, 'Minutos': 0}, {'Año': 2007, 'Minutos': 0}, {'Año': 2008, 'Minutos': 1241}, {'Año': 2009, 'Minutos': 2870}, {'Año': 2010, 'Minutos': 5246}, {'Año': 2011, 'Minutos': 16655}, {'Año': 2012, 'Minutos': 19193}, {'Año': 2013, 'Minutos': 30997}, {'Año': 2014, 'Minutos': 72646}, {'Año': 2015, 'Minutos': 112565}, {'Año': 2016, 'Minutos': 111925}, {'Año': 2017, 'Minutos': 58}]},
+                   'Simulation': {'Usuario con más minutos jugados para género Simulation': 'REBAS_AS_F-T', 'Minutos jugados': [{'Año': 2006, 'Minutos': 1673}, {'Año': 2007, 'Minutos': 426}, {'Año': 2008, 'Minutos': 388}, {'Año': 2009, 'Minutos': 4642}, {'Año': 2010, 'Minutos': 556}, {'Año': 2011, 'Minutos': 22193}, {'Año': 2012, 'Minutos': 9960}, {'Año': 2013, 'Minutos': 19055}, {'Año': 2014, 'Minutos': 21175}, {'Año': 2015, 'Minutos': 29977}, {'Año': 2016, 'Minutos': 51404}, {'Año': 2017, 'Minutos': 0}]},
+                   'Indie': {'Usuario con más minutos jugados para género Indie': 'REBAS_AS_F-T', 'Minutos jugados': [{'Año': 1999, 'Minutos': 0}, {'Año': 2001, 'Minutos': 11}, {'Año': 2003, 'Minutos': 1863}, {'Año': 2005, 'Minutos': 0}, {'Año': 2006, 'Minutos': 1673}, {'Año': 2007, 'Minutos': 0}, {'Año': 2008, 'Minutos': 1366}, {'Año': 2009, 'Minutos': 6395}, {'Año': 2010, 'Minutos': 8239}, {'Año': 2011, 'Minutos': 41078}, {'Año': 2012, 'Minutos': 40191}, {'Año': 2013, 'Minutos': 73006}, {'Año': 2014, 'Minutos': 208536}, {'Año': 2015, 'Minutos': 239255}, {'Año': 2016, 'Minutos': 212445}, {'Año': 2017, 'Minutos': 3096}]},
+                   'Racing': {'Usuario con más minutos jugados para género Racing': 'REBAS_AS_F-T', 'Minutos jugados': [{'Año': 2007, 'Minutos': 101}, {'Año': 2008, 'Minutos': 0}, {'Año': 2009, 'Minutos': 467}, {'Año': 2010, 'Minutos': 30}, {'Año': 2011, 'Minutos': 4125}, {'Año': 2012, 'Minutos': 2974}, {'Año': 2013, 'Minutos': 5313}, {'Año': 2014, 'Minutos': 10761}, {'Año': 2015, 'Minutos': 12004}, {'Año': 2016, 'Minutos': 11973}]},
+                   'Sports': {'Usuario con más minutos jugados para género Sports': 'REBAS_AS_F-T', 'Minutos jugados': [{'Año': 2009, 'Minutos': 3501}, {'Año': 2011, 'Minutos': 2176}, {'Año': 2013, 'Minutos': 6437}, {'Año': 2014, 'Minutos': 14851}, {'Año': 2015, 'Minutos': 10437}, {'Año': 2016, 'Minutos': 14653}]},
+                   'Adventure': {'Usuario con más minutos jugados para género Adventure': 'REBAS_AS_F-T', 'Minutos jugados': [{'Año': 2002, 'Minutos': 0}, {'Año': 2003, 'Minutos': 1863}, {'Año': 2005, 'Minutos': 1113}, {'Año': 2006, 'Minutos': 0}, {'Año': 2007, 'Minutos': 0}, {'Año': 2008, 'Minutos': 1241}, {'Año': 2009, 'Minutos': 2966}, {'Año': 2010, 'Minutos': 717}, {'Año': 2011, 'Minutos': 12619}, {'Año': 2012, 'Minutos': 44997}, {'Año': 2013, 'Minutos': 71001}, {'Año': 2014, 'Minutos': 104096}, {'Año': 2015, 'Minutos': 188300}, {'Año': 2016, 'Minutos': 163831}, {'Año': 2017, 'Minutos': 3555}]},
+                   'Early Access': {'Usuario con más minutos jugados para género Early Access': 'Steamified', 'Minutos jugados': [{'Año': 2012, 'Minutos': 111}, {'Año': 2013, 'Minutos': 550}, {'Año': 2014, 'Minutos': 1090}, {'Año': 2015, 'Minutos': 8855}, {'Año': 2016, 'Minutos': 17020}, {'Año': 2017, 'Minutos': 203}, {'Año': 2018, 'Minutos': 296}]},
+                   'Free to Play': {'Usuario con más minutos jugados para género Free to Play': 'DownSyndromeKid', 'Minutos jugados': [{'Año': 1996, 'Minutos': 0}, {'Año': 2001, 'Minutos': 2892}, {'Año': 2005, 'Minutos': 0}, {'Año': 2006, 'Minutos': 1104}, {'Año': 2007, 'Minutos': 136}, {'Año': 2008, 'Minutos': 0}, {'Año': 2009, 'Minutos': 0}, {'Año': 2010, 'Minutos': 190}, {'Año': 2011, 'Minutos': 106}, {'Año': 2012, 'Minutos': 29}, {'Año': 2013, 'Minutos': 7302}, {'Año': 2014, 'Minutos': 21264}, {'Año': 2015, 'Minutos': 29678}, {'Año': 2016, 'Minutos': 1598}, {'Año': 2017, 'Minutos': 5856}]},
+                   'Massively Multiplayer': {'Usuario con más minutos jugados para género Massively Multiplayer': 'Hati_Hati_Hati_Hati_Hati_Hati', 'Minutos jugados': [{'Año': 2008, 'Minutos': 0}, {'Año': 2009, 'Minutos': 0}, {'Año': 2011, 'Minutos': 265}, {'Año': 2012, 'Minutos': 6681}, {'Año': 2013, 'Minutos': 5274}, {'Año': 2014, 'Minutos': 9794}, {'Año': 2015, 'Minutos': 10827}, {'Año': 2016, 'Minutos': 4893}, {'Año': 2017, 'Minutos': 3191}]},
+                   'Utilities': {'Usuario con más minutos jugados para género Utilities': 'NotForPikachu', 'Minutos jugados': [{'Año': 2014, 'Minutos': 46}, {'Año': 2015, 'Minutos': 8665}]},
+                   'Animation &amp; Modeling': {'Usuario con más minutos jugados para género Animation &amp; Modeling': '76561198063361762', 'Minutos jugados': [{'Año': 2013, 'Minutos': 4661}]},
+                   'Video Production': {'Usuario con más minutos jugados para género Video Production': '76561198126926393', 'Minutos jugados': [{'Año': 2014, 'Minutos': 5223}]},
+                   'Design &amp; Illustration': {'Usuario con más minutos jugados para género Design &amp; Illustration': 'H-Alo', 'Minutos jugados': [{'Año': 2012, 'Minutos': 5128}, {'Año': 2015, 'Minutos': 5414}]},
+                   'Web Publishing': {'Usuario con más minutos jugados para género Web Publishing': 'H-Alo', 'Minutos jugados': [{'Año': 2005, 'Minutos': 11}, {'Año': 2012, 'Minutos': 5128}, {'Año': 2015, 'Minutos': 5414}]},
+                   'Education': {'Usuario con más minutos jugados para género Education': '76561198063361762', 'Minutos jugados': [{'Año': 2013, 'Minutos': 4661}]},
+                   'Software Training': {'Usuario con más minutos jugados para género Software Training': 'hterrormc', 'Minutos jugados': [{'Año': 2015, 'Minutos': 4456}]},
+                   'Photo Editing': {'Usuario con más minutos jugados para género Photo Editing': 'thugnificent', 'Minutos jugados': [{'Año': 2015, 'Minutos': 0}, {'Año': 2016, 'Minutos': 502}]},
+                   'Audio Production': {'Usuario con más minutos jugados para género Audio Production': 'Nyanonymous', 'Minutos jugados': [{'Año': 2014, 'Minutos': 3786}]}}
+    
+    if genero in diccionario:
+        return diccionario[genero]
+    else:
+        return "No se encontró un género similar al ingresado, ingrese otro tipo de género"
+
+
 @app.get("/User-Recommend/{anio}", name="Top 3 de juegos MÁS recomendados por usuarios por año")
 def UserRecommend(anio: int):
     '''
